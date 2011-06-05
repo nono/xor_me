@@ -10,7 +10,6 @@ nHash cc1f
 Try some password on this file.
 
 $ ./xor_me toto 0xd10d 0Xcc1f
-Algorithm XOR MS Word
 Key: d10d
 Hash: cc1f
 FAIL! toto
@@ -18,7 +17,6 @@ FAIL! toto
 Try the good password on this file.
 
 $ ./xor_me 0824 0xd10d 0Xcc1f
-Algorithm XOR MS Word
 Key: d10d
 Hash: cc1f
 Good guess: 0824
@@ -39,16 +37,14 @@ WARNING: little endian, you should permute bytes
 
 Try some password on this file.
 
-$ ./xor_me 4242 0x499a 0Xcc61 1
-Algorithm XOR MS Excel
+$ ./xor_me 4242 0x499a 0Xcc61
 Key: 499a
 Hash: cc61
 FAIL! 4242
 
 Try the good password on this file.
 
-$ ./xor_me 1950 0x499a 0Xcc61 1
-Algorithm XOR MS Excel
+$ ./xor_me 1950 0x499a 0Xcc61
 Key: 499a
 Hash: cc61
 Good guess: 1950
