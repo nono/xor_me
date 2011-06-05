@@ -1,0 +1,21 @@
+#!/bin/sh
+
+if [ "$1" == "" ];
+then
+	echo "Usage: $0 xls_file"
+	exit 1
+fi
+
+if [ -x "/usr/bin/hexdump" ] ;
+then
+	echo "Bored by reading the specs... Just pick up a XOR encryption pattern"
+	echo "Record type FilePass with 2F 00."
+	echo "followed by 00 06 for size."
+	echo "followed by 00 00 for wEncryptionType XOR."
+	echo "followed by what you want: 2 bytes for key, 2 bytes for hash."
+	echo "WARNING: little endian, you should permute bytes"
+	/usr/bin/hexdump -C "$1"|grep -A1 --color "2f 00 06 00 00 00"
+else
+	echo "hexdump required."
+	exit 1
+fi

@@ -1,0 +1,111 @@
+== Usage for doc files ==
+
+Get key/hash values for a given doc file.
+
+$ ./xor_doc some.doc
+Could be a XOR-ciphered doc file.
+nKey  d10d
+nHash cc1f
+
+Try some password on this file.
+
+$ ./xor_me toto 0xd10d 0Xcc1f
+Algorithm XOR MS Word
+Key: d10d
+Hash: cc1f
+FAIL! toto
+
+Try the good password on this file.
+
+$ ./xor_me 0824 0xd10d 0Xcc1f
+Algorithm XOR MS Word
+Key: d10d
+Hash: cc1f
+Good guess: 0824
+
+== Usage for doc files ==
+
+Get key/hash values for a given xls file.
+
+$ ./xor_xls some.xls
+Bored by reading the specs... Just pick up a XOR encryption pattern
+Record type FilePass with 2F 00.
+followed by 00 06 for size.
+followed by 00 00 for wEncryptionType XOR.
+followed by what you want: 2 bytes for key, 2 bytes for hash.
+WARNING: little endian, you should permute bytes
+00000210  06 03 00 00 86 00 00 00  2f 00 06 00 00 00 9a 49  |......../......I|
+00000220  61 cc e1 00 02 00 b0 04  c1 00 02 00 ca a4 e2 00  |a...............|
+
+Try some password on this file.
+
+$ ./xor_me 4242 0x499a 0Xcc61 1
+Algorithm XOR MS Excel
+Key: 499a
+Hash: cc61
+FAIL! 4242
+
+Try the good password on this file.
+
+$ ./xor_me 1950 0x499a 0Xcc61 1
+Algorithm XOR MS Excel
+Key: 499a
+Hash: cc61
+Good guess: 1950
+
+== Limitations ==
+
+Only XOR, only XLS, only DOC. Nothing more nothing less.
+
+== References ==
+
+- Slides Pacsec 2009 "Analyzing Word and Excel Encryption
+  An operational solution" from Eric Filiol, filiol@esiea.fr
+  ESIEA - Laval - Operational Cryptology and Virology Lab
+- [MS-DOC]: Word (.doc) Binary File Format, June 2010.
+- [MS-XLS]: Excel Binary File Format (.xls) Structure Specification, March 2011.
+- [MS-OFFCRYPTO] Microsoft Corporation, "Office Document Cryptography Structure Specification", June 2008.
+
+== Licences ==
+
+- All files excerpt binarycodec.cxx and binarycodec.hxx:
+
+    Copyright (C) 2011 Benoît Sibaud <bsibaud@april.org>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License version 3
+    only, as published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License version 3 for more details
+    (a copy is included in the LICENSE file that accompanied this code).
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+- binarycodec.cxx and binarycodec.hxx files:
+
+    Copyright 2000, 2010 Oracle and/or its affiliates.
+
+    OpenOffice.org - a multi-platform office productivity suite
+
+    This file is part of OpenOffice.org.
+
+    OpenOffice.org is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License version 3
+    only, as published by the Free Software Foundation.
+
+    OpenOffice.org is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License version 3 for more details
+    (a copy is included in the LICENSE file that accompanied this code).
+
+    You should have received a copy of the GNU Lesser General Public License
+    version 3 along with OpenOffice.org.  If not, see
+    <http://www.openoffice.org/license.html>
+    for a copy of the LGPLv3 License.
+
