@@ -78,11 +78,8 @@ int main(int argc, char ** argv) {
 
 	// BRUTE FORCE up to 8 chars
 	for (unsigned char i=32; i < 127; ++i) {
-		std::cout << "  " << (short)i << std::endl;
 		for (unsigned char j=32; j < 128; ++j) {
-			std::cout << "    " << (short)j << std::endl;
 			for (unsigned char k=32; k < 128; ++k) {
-				std::cout << "      " << (short)k << std::endl;
 				for (unsigned char l=32; l < 128; ++l) {
 					for (unsigned char m=32; m < 128; ++m) {
 						for (unsigned char n=32; n < 128; ++n) {
@@ -93,7 +90,6 @@ int main(int argc, char ** argv) {
 									t[0] = static_cast<unsigned char>(x);
 									if (nKey == lclGetKey(t, 16)) {
 										std::cout << "Password: '" << t << "'" << std::endl;
-										return 0;
 									}
 								}
 								hash ^= r[1];
