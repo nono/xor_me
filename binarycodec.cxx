@@ -137,6 +137,8 @@ public:
      */
     static unsigned short   getHash( const unsigned char* pnPassData, signed long nSize );
 
+    static unsigned short   getBaseKey( const unsigned char* pnPassData, signed long nSize );
+
 private:
     CodecType           meCodecType;        /// Codec type.
     unsigned char           mpnKey[ 16 ];       /// Encryption key.
@@ -345,6 +347,11 @@ bool BinaryCodec_XOR::skip( signed long nBytes )
 unsigned short BinaryCodec_XOR::getHash( const unsigned char* pnPassData, signed long nSize )
 {
     return lclGetHash( pnPassData, nSize );
+}
+
+unsigned short BinaryCodec_XOR::getBaseKey( const unsigned char* pnPassData, signed long nSize )
+{
+    return lclGetKey( pnPassData, nSize );
 }
 
 // ============================================================================

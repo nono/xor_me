@@ -160,6 +160,8 @@ public:
      */
     static sal_uInt16   getHash( const sal_uInt8* pnPassData, sal_Int32 nSize );
 
+    static sal_uInt16   getBaseKey( const sal_uInt8* pnPassData, sal_Int32 nSize );
+
 private:
     CodecType           meCodecType;        /// Codec type.
     sal_uInt8           mpnKey[ 16 ];       /// Encryption key.
