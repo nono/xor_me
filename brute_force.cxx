@@ -23,11 +23,9 @@ unsigned short lclGetKey( const unsigned char* pnPassData, signed long nBufferSi
     unsigned short nKeyBase = 0x8000;
     unsigned short nKeyEnd = 0xFFFF;
     const unsigned char* pnChar = pnPassData + nLen - 1;
-    for( signed long nIndex = 0; nIndex < nLen; ++nIndex, --pnChar )
-    {
+    for( signed long nIndex = 0; nIndex < nLen; ++nIndex, --pnChar ) {
         unsigned char cChar = *pnChar & 0x7F;
-        for( size_t nBit = 0; nBit < 8; ++nBit )
-        {
+        for( size_t nBit = 0; nBit < 8; ++nBit ) {
             lclRotateLeft( nKeyBase, 1 );
             if( nKeyBase & 1 ) nKeyBase ^= 0x1020;
             if( cChar & 1 ) nKey ^= nKeyBase;
@@ -39,20 +37,14 @@ unsigned short lclGetKey( const unsigned char* pnPassData, signed long nBufferSi
     return nKey ^ nKeyEnd;
 }
 
-unsigned short lclGetHash( const unsigned char* pnPassData, signed long nBufferSize )
+unsigned short lclGetHash( const unsigned char* pnPassData, const unsigned short* pnRotatedData,signed long nBufferSize )
 {
     signed long nLen = lclGetLen( pnPassData, nBufferSize );
+    unsigned short nHash = static_cast< unsigned short >( nLen ) ^ 0xCE4B;
 
-    unsigned short nHash = static_cast< unsigned short >( nLen );
-    if( nLen > 0 )
-        nHash ^= 0xCE4B;
-
-    const unsigned char* pnChar = pnPassData;
-    for( signed long nIndex = 0; nIndex < nLen; ++nIndex, ++pnChar )
-    {
-        unsigned short cChar = *pnChar;
-        lclRotateLeft( cChar, nIndex + 1 );
-        nHash ^= cChar;
+    const unsigned short* pnChar = pnRotatedData;
+    for( signed long nIndex = 0; nIndex < nLen; ++nIndex, ++pnChar ) {
+        nHash ^= *pnChar;
     }
     return nHash;
 }
@@ -75,7 +67,8 @@ int main(int argc, char ** argv) {
 	std::cout << std::hex << "Key: " << nKey << std::endl;
 	std::cout << std::hex << "Hash: " << nHash << std::endl;
 
-	unsigned char t[9] = { '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0' };
+	unsigned char  t[9] = { '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0' };
+	unsigned short r[9] = { '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0' };
 
 	// BRUTE FORCE up to 6 chars
 	for(unsigned char i=32; i < 127; ++i) {
@@ -86,22 +79,28 @@ int main(int argc, char ** argv) {
 				for(unsigned char l=32; l < 128; ++l) {
 					for(unsigned char m=32; m < 128; ++m) {
 						for(unsigned char n=32; n < 128; ++n) {
-							if (nHash == lclGetHash(t, 16)) {
+							if (nHash == lclGetHash(t, r, 16)) {
 								if (nKey == lclGetKey(t, 16)) {
 									std::cout << "Password: " << t << std::endl;
 									return 0;
 								}
 							}
-							t[0] = n;
+							r[0] = t[0] = n;
+							lclRotateLeft(r[0], 1);
 						}
-						t[1] = m;
+						r[1] = t[1] = m;
+						lclRotateLeft(r[1], 2);
 					}
-					t[2] = l;
+					r[2] = t[2] = l;
+					lclRotateLeft(r[2], 3);
 				}
-				t[3] = k;
+				r[3] = t[3] = k;
+				lclRotateLeft(r[3], 4);
 			}
-			t[4] = j;
+			r[4] = t[4] = j;
+			lclRotateLeft(r[4], 5);
 		}
-		t[5] = i;
+		r[5] = t[5] = i;
+		lclRotateLeft(r[5], 6);
 	}
 }
