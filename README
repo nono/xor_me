@@ -21,7 +21,7 @@ Key: d10d
 Hash: cc1f
 Good guess: 0824
 
-== Usage for doc files ==
+== Usage for xls files ==
 
 Get key/hash values for a given xls file.
 
@@ -48,6 +48,19 @@ $ ./xor_me 1950 0x499a 0Xcc61
 Key: 499a
 Hash: cc61
 Good guess: 1950
+
+== Bruteforcing the password ==
+
+$ ./brute_force 0x499a 0xcc61
+Key: 499a
+Hash: cc61
+  20
+    20
+      20
+Password: '1950'
+
+It is limited to password with up to 8 chars. It works well for short
+password and can take several hours for password with 7 or 8 chars.
 
 == Limitations ==
 
