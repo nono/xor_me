@@ -1,3 +1,7 @@
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
 #include <iostream>
 #include <sstream>
 
@@ -54,13 +58,50 @@ unsigned short lclGetHash(const unsigned char* pnPassData, const unsigned short*
 	return nHash;
 }
 
+// state for restore in SIGINT handler
+unsigned char i, j, k, l, m, n, o;
+unsigned short hash;
+unsigned short r[9] = {0};
+unsigned char t[9] = {1, 0};
 
+#define STATEFORMAT "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx:%hhx:" \
+                    "%hx:" \
+                    "%hx%hx%hx%hx%hx%hx%hx%hx:" \
+                    "%hhx%hhx%hhx%hhx%hhx%hhx%hhx%hhx"
+
+void dump_exit(int) {
+	printf("State: " STATEFORMAT "\n",
+	       i, j, k, l, m, n, o,
+	       hash,
+	       r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7],
+	       t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7]);
+	exit(0);
+}
+
+void usage_exit(char *prog) {
+	std::cout << "Usage: " << prog << " <0xKey> <0xHash>" << std::endl;
+	exit(1);
+}
 
 int main(int argc, char ** argv) {
-	if (argc < 3) {
-		std::cout << "Usage: " << argv[0] << " <0xKey> <0xHash>" << std::endl;
-		return -1;
+	bool state = false;
+	char *prog = argv[0];
+
+	if (argc < 2)
+		usage_exit(prog);
+	if (!strcmp("-s", argv[1])) {
+		sscanf(argv[2], STATEFORMAT,
+		       &i, &j, &k, &l, &m, &n, &o,
+		       &hash,
+		       r, r+1, r+2, r+3, r+4, r+5, r+6, r+7,
+		       t, t+1, t+2, t+3, t+4, t+5, t+6, t+7);
+		state = true;
+		argv += 2; argc -= 2;
 	}
+	if (argc < 3)
+		usage_exit(prog);
+
+	signal(SIGINT, &dump_exit);
 
 	unsigned short nKey;
 	std::istringstream issk(argv[1]);
@@ -72,18 +113,19 @@ int main(int argc, char ** argv) {
 	std::cout << std::hex << "Key: " << nKey << std::endl;
 	std::cout << std::hex << "Hash: " << nHash << std::endl;
 
-	unsigned char  t[9] = {    1, '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0' };
-	unsigned short r[9] = { '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0' };
-	unsigned short hash = lclGetHash(t, r, 16);
+	if (state)
+		goto skipInits;
 
+	hash = lclGetHash(t, r, 16);
 	// BRUTE FORCE up to 8 chars
-	for (unsigned char i=32; i < 127; ++i) {
-		for (unsigned char j=32; j < 128; ++j) {
-			for (unsigned char k=32; k < 128; ++k) {
-				for (unsigned char l=32; l < 128; ++l) {
-					for (unsigned char m=32; m < 128; ++m) {
-						for (unsigned char n=32; n < 128; ++n) {
-							for (unsigned char o=32; o < 128; ++o) {
+	for (i=32; i < 127; ++i) {
+		for (j=32; j < 128; ++j) {
+			for (k=32; k < 128; ++k) {
+				for (l=32; l < 128; ++l) {
+					for (m=32; m < 128; ++m) {
+						for (n=32; n < 128; ++n) {
+							for (o=32; o < 128; ++o) {
+skipInits:
 								unsigned short x = nHash ^ hash;
 								lclRotateRight(x, 1);
 								if (32 <= x && x < 127) {
