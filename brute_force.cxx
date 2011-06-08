@@ -64,10 +64,10 @@ unsigned short hash;
 unsigned short r[9] = {0};
 unsigned char t[9] = {1, 0};
 
-#define STATEFORMAT "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx:%hhx:" \
-                    "%hx:" \
-                    "%hx%hx%hx%hx%hx%hx%hx%hx:" \
-                    "%hhx%hhx%hhx%hhx%hhx%hhx%hhx%hhx"
+#define STATEFORMAT "%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:" \
+                    "%04hx:" \
+                    "%04hx%04hx%04hx%04hx%04hx%04hx%04hx%04hx:" \
+                    "%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx"
 
 void dump_exit(int) {
 	printf("State: " STATEFORMAT "\n",
