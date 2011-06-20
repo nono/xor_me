@@ -75,6 +75,11 @@ Only XOR, only XLS, only DOC. Nothing more nothing less.
 - [MS-XLS]: Excel Binary File Format (.xls) Structure Specification, March 2011.
 - [MS-OFFCRYPTO] Microsoft Corporation, "Office Document Cryptography Structure Specification", June 2008.
 
+== Samples ==
+
+You can find two samples of encrypted files (one doc and one xls) in the
+`samples` directory.
+
 == Licences ==
 
 - All files excerpt binarycodec.cxx and binarycodec.hxx:
