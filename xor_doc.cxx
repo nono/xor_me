@@ -33,8 +33,8 @@ int main(int argc, char **argv) {
 			std::cerr << "Not a XOR-ciphered doc file. fObfuscated=" << fObfuscated << " fEncrypted=" << fEncrypted << std::endl;  
 		}
 
-		unsigned short nKey = data[0x211] * 256 + data[0x210];
-		unsigned short nHash = data[0x20F] * 256 + data[0x20E];
+		unsigned short nKey = (unsigned char) data[0x211] * 256 + (unsigned char) data[0x210];
+		unsigned short nHash = (unsigned char) data[0x20F] * 256 + (unsigned char) data[0x20E];
 
 		std::cout << "nKey  " << std::hex << nKey << std::endl;
 		std::cout << "nHash " << std::hex << nHash << std::endl;
